@@ -1,0 +1,28 @@
+#include <iostream>
+#include <vector>
+using namespace std;
+
+
+/*void menu() {
+
+}
+string ansParse(string x){
+
+}
+string rootToPower(string x){
+
+}
+string ShuntYardAlg(string x){
+
+}
+*/
+void conversion(string x) {
+	vector<char> data(x.begin(), x.end());
+	for (int i = 0; i < data.size(); i++) {
+		cout << data.at(i);
+	}
+}
+int main() {
+	conversion("hello");
+	return 0;
+}
