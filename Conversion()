@@ -22,6 +22,10 @@ void conversion(string x) {
 		cout << data.at(i);
 	}
 }
+void conversionToString(vector<char>& x) {
+	string s(x.begin(), x.end());
+	cout << s;
+}
 int main() {
 	conversion("hello");
 	return 0;
