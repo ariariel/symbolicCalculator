@@ -86,7 +86,7 @@ void menu(){
 				cout << "Operator syntax: " << endl;
 				cout << "The square root of x: sqrt:x" << endl;
 				cout << "X to the power of y: x^y" << endl;
-				cout << "The nth root of x: x^(1/n) (where 'n' is replaced by a number)" << endl;
+				cout << "The nth root of x: nrt:x (where 'n' is replaced by a number)" << endl;
 				cout << "Log base b of x: log_b:x" << endl;
 			}
 
