@@ -6,12 +6,28 @@
 #include <vector>
 #include <cstdlib>
 #include <stdexcept>
+
+#include "Operator.h"
+#include "Input.h"
+#include "Integer.h"
 using namespace std;
 
 
 vector<char> conversion(string x) {
 	vector<char> data(x.begin(), x.end());
 	return data;
+}
+vector<Input*> conversion2(vector<char> rpn){
+	vector<Input*> input;
+	for(int i=0; i<rpn.size(); i++){
+		if(isdigit(rpn[i])){
+			input.push_back(new Integer(rpn[i]-'0'));
+		}
+		else if(rpn[i]=='+'||rpn[i]=='-'||rpn[i]=='/'||rpn[i]=='*'||rpn[i]=='^'){
+			input.push_back(new Operator(rpn[i]));
+		}
+	}
+	return input;
 }
 
 
@@ -80,10 +96,15 @@ vector<char> shuntYard(string x) {
 
 
 int main(){
-string a = "-4";
+string a = "4+3";
 vector<char> output = shuntYard(a);
-for (int i =0; i<output.size(); i++){
-	cout<<output[i];
-}
+vector<Input*> input = conversion2(output);
 
+//TESTING - cast the subclass upon the superclass to be able to access subclass methods
+Integer* first = (Integer*)input[0];
+Integer* second = (Integer*)input[1];
+Operator* third = (Operator*)input[2];
+cout<<first->getInteger();
+cout<<second->getInteger();
+cout<<third->getOperand();
 }

@@ -9,9 +9,18 @@ private:
 	int value;
 
 public:
-	Integer();
-	Integer(int value);
-	int getInteger();
+	Integer(){
+
+	}
+	Integer(int value){
+		this->value = value;
+		cout<< "INTEGER OBJECT CREATED" << endl;
+	}
+
+	virtual int getInteger(){
+		return value;
+	}
+
 
 };
 #endif /* INTEGER_H_ */
