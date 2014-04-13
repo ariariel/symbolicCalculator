@@ -1,59 +1,64 @@
 #include "Calculator.h"
 
 Calculator::Calculator(){
-	vector<char> RPNVec;
+	vector<Input*> RPNVec;
 }
 
-string Calculator::addAllToIndex(Input input1, Input input2, Operator operate, vector<Input> &RPNVec){
-	ostringstream str;
-	if(typeid(input1) == typeid(Integer)){
-	str << input1.getInteger();
-	}
-	else if(typeid(input1) == typeid(Rational)){
-	str << input1.getRational();
-	}
-	else if(typeid(input1) == typeid(Irrational)){
-	str << input1.getIrrational();
-	}
 
-	if(typeid(operate) == typeid(Operator)){
-		str << operate.getOperand();
-	}
+// string Calculator::addAllToIndex(Input input1, Input input2, Operator operate, vector<Input> &RPNVec){
+// 	ostringstream str;
+// 	if(typeid(input1) == typeid(Integer)){
+// 	str << input1.getInteger();
+// 	}
+// 	else if(typeid(input1) == typeid(Rational)){
+// 	str << input1.getRational();
+// 	}
+// 	else if(typeid(input1) == typeid(Irrational)){
+// 	str << input1.getIrrational();
+// 	}
 
-	if(typeid(input2) == typeid(Integer)){
-	str << input1.getInteger();
-	}
-	else if(typeid(input2) == typeid(Rational)){
-	str << input2.getRational();
-	}
-	else if(typeid(input2) == typeid(Irrational)){
-	str << input2.getIrrational();
-	}
+// 	if(typeid(operate) == typeid(Operator)){
+// 		str << operate.getOperand();
+// 	}
 
-	return str.str();
-}
+// 	if(typeid(input2) == typeid(Integer)){
+// 	str << input1.getInteger();
+// 	}
+// 	else if(typeid(input2) == typeid(Rational)){
+// 	str << input2.getRational();
+// 	}
+// 	else if(typeid(input2) == typeid(Irrational)){
+// 	str << input2.getIrrational();
+// 	}
 
-void Calculator::add(int index){
+// 	return str.str();
+// }
+
+void Calculator::add(int index, vector<Input*> Vec){
 	int result;
-	if((typeid(RPNVec[index]) == typeid(Integer)) && (typeid(RPNVec[index + 1]) == typeid(Integer))){
-
-		int number1 = (Integer*) RPNVec[index].getInteger();
-		int number2 = RPNVec[index + 1];
+	cout<< typeid(Vec[index]).name();
+	if((typeid(Vec[index]) == typeid(Integer)) /*&& (typeid(Vec[index + 1]) == typeid(Integer))*/){
+		cout<< "hello";
+		Integer* first = (Integer*)RPNVec[index];
+		int number1 = first->getInteger();
+		Integer* second = (Integer*)RPNVec[index + 1];
+		int number2 = second->getInteger();
 		int result = number1 + number2;
 	}
-	else{ 
-		 Input input1 = RPNVec[index];
-		 Input input2 = RPNVec[index + 1];
-		 Input input3 = RPNVec[index + 2];
-		 string result = addAllToIndex(input1, input2, input3, RPNVec);
-	}
-	 RPNVec[index] = result;
-	 RPNVec.erase(RPNVec.begin() + index);
-	 RPNVec.erase(RPNVec.begin() + (index+1));
+	// else{ 
+	// 	 // Input* input1 = RPNVec[index];
+	// 	 // Input* input2 = RPNVec[index + 1];
+	// 	 // Input* input3 = RPNVec[index + 2];
+	// 	 // string result = addAllToIndex(input1, input2, input3, RPNVec);
+	// }
+	//  RPNVec[index] = new Integer(result);
+	//  RPNVec.erase(RPNVec.begin() + index);
+	//  RPNVec.erase(RPNVec.begin() + (index+1));
 
-	 	for(int i = 0; i < RPNVec.size(); i++){
-		cout << (Integer*) RPNVec[i].getInteger();
-	}
+ // 	for(int i = 0; i < RPNVec.size(); i++){
+ // 		Integer* test = (Integer*)RPNVec[i];
+	// 	cout << test->getInteger();
+	// }
 
 }
 
