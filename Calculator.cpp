@@ -36,8 +36,7 @@ Calculator::Calculator(){
 
 void Calculator::add(int index, vector<Input*> Vec){
 	int result;
-	cout<< typeid(Vec[index]).name();
-	if((typeid(Vec[index]) == typeid(Integer)) /*&& (typeid(Vec[index + 1]) == typeid(Integer))*/){
+	if((typeid(*Vec[index]) == typeid(Integer)) && (typeid(*Vec[index + 1]) == typeid(Integer))){
 		cout<< "hello";
 		Integer* first = (Integer*)RPNVec[index];
 		int number1 = first->getInteger();
