@@ -129,39 +129,40 @@ void Calculator::multiply(int index){
 		RPNVec = rewriteVec(index,res);
 	}
 }
+void Calculator::power(int index){
+	int result;
+	if((typeid(*RPNVec[index]) == typeid(Integer)) && (typeid(*RPNVec[index + 1]) == typeid(Integer))){
+		Integer* first = (Integer*)RPNVec[index];
+		int number1 = first->getInteger();
+		Integer* second = (Integer*)RPNVec[index + 1];
+		int number2 = second->getInteger();
+		result = number1 ^ number2;
+		Integer* res = new Integer(result);
+		RPNVec = rewriteVec(index,res);
+	}
+}
 
-/* bool Calculator:: solve(){ //need some kind of index as a parameter?
-	Operator op = Operator();
+void Calculator:: solve(){ 
 
-	if(typeid(RPNVec[i]) == typeid(Operator)){ //need something other than an i to iterate through the vector
-
-		if(RPNVec[i].getOperand() == '+'){
-			op.add(RPNVec[i]);
-			solve();
+	for(int i = 0; i<RPNVec.size(); i++){
+		if(typeid(*RPNVec[i]) == typeid(Operator)){
+			Operator* opObject = (Operator*)RPNVec[i];
+			char op = opObject->getOperand();
+			switch(op){
+				case '+': add(i-2);
+						solve();
+				case '-': subtract(i-2);
+						solve();
+				case '/': divide(i-2);
+						solve();
+				case '*': multiply(i-2);
+						solve();
+				case '^': power(i-2);
+						solve();
+			}
 		}
-
-		if(RPNVec[i].getOperand() == '-'){
-			op.subtract(RPNVec[i]);
-			solve();
-		}
-		
-		if(RPNVec[i].getOperand() == '*'){
-			op.multiply(RPNVec[i]);
-			solve();
-		}
-		
-		if(RPNVec[i].getOperand() == '/'){
-			op.divide(RPNVec[i]);
-			solve();
-		}
-
-		if(RPNVec[i].getOperand() == '^'){
-			op.power(RPNVec[i]);
-			solve();
+		if(RPNVec.size() == 1){
+			cout<< "SOLVED!" << endl;
 		}
 	}
-
-	return true;
-
 }
-*/

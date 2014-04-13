@@ -23,12 +23,13 @@ public:
 	vector<Input*> rewriteVec(int index, Input* res);
 	string getlastAns();
 	void setAns(string ans);
-	bool solve();
+	void solve();
 	//string addAllToIndex(Input input1, Input input2, Operator operate);
 	void add(int index);
 	void subtract(int index);
 	void divide(int index);
 	void multiply(int index);
+	void power(int index);
 
 };
 #endif /* CALCULATOR_H_ */
