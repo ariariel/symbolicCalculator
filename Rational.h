@@ -8,12 +8,12 @@ using namespace std;
 
 
 
-class Rational
+class Rational: public Input
 {
 private:
 
-  static int Numerator_;
-  static int Denominator_;
+  int Numerator_;
+  int Denominator_;
 
 public:
 

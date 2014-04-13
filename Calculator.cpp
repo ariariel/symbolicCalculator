@@ -3,12 +3,12 @@ using namespace std;
 
 Calculator::Calculator(){
 	vector<Input*> RPNVec;
-	lastAns = 0;
+	lastAns;
 }
-string lastAns(){
+string Calculator::getlastAns(){
 	return lastAns;
 }
-void setAns(string ans){
+void Calculator::setAns(string ans){
 	this->lastAns = ans;
 }
 
@@ -67,16 +67,7 @@ void Calculator::add(int index){
 		int number2 = second->getInteger();
 		result = number1 + number2;
 		Integer* res = new Integer(result);
-		vector<Input*> result;
-		for(int i =0; i<index; i++){
-			result[i] = RPNVec[i];
-		}
-		result.push_back(res);
-		for(int i =index+1; i<RPNVec.size()-2; i++){
-			result[i] = RPNVec[i];
-		}
-
-		setVec(result);
+		RPNVec = rewriteVec(index, res);
 	}
 	// else{ 
 	// 	 // Input* input1 = RPNVec[index];
@@ -120,8 +111,22 @@ void Calculator::divide(int index){
 		}
 		else if(typeid(result)==typeid(0.5)){
 			Rational* res = new Rational(number1, number2);
+			res->Simplify();
+			RPNVec = rewriteVec(index, res);
 
 		}
+	}
+}
+void Calculator::multiply(int index){
+	int result;
+	if((typeid(*RPNVec[index]) == typeid(Integer)) && (typeid(*RPNVec[index + 1]) == typeid(Integer))){
+		Integer* first = (Integer*)RPNVec[index];
+		int number1 = first->getInteger();
+		Integer* second = (Integer*)RPNVec[index + 1];
+		int number2 = second->getInteger();
+		result = number1 * number2;
+		Integer* res = new Integer(result);
+		RPNVec = rewriteVec(index,res);
 	}
 }
 
