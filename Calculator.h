@@ -10,13 +10,14 @@ using namespace std;
 
 class Calculator{
 
-//protected:
-//vector<char> RPNVec;
+protected:
+	vector<Input> RPNVec;
 
 public:
-	vector<char> RPNVec;
 	Calculator();
 	bool solve();
+	string addAllToIndex(Input input1, Input input2, Operator operate, vector<Input> &RPNVec);
+	void add(int index);
 
 };
 #endif /* CALCULATOR_H_ */
