@@ -94,15 +94,17 @@ vector<char> shuntYard(string x) {
 	return queue;
 }
 string ansParse(string y) {
+	Calculator calc = Calculator();
     size_t check = y.find("Ans");
     size_t check2 = y.find("ans");
-    size_t position;
+    size_t position = 0;
     if(check != string::npos) {
         position = check;
     }
     else if(check2 != string::npos) {
         position = check2;
     }
+	if(position != string::npos){
     stringstream ss;
     for(int i = 0; i < position; i++) {
         ss << y.at(i);
@@ -112,6 +114,7 @@ string ansParse(string y) {
         ss << y.at(i);
     }
     return ss.str();
+	}
 }
 /*
 void findNthRoot(string y) {
@@ -193,13 +196,13 @@ void menu(){
 			//if the input contains ans, then call AnsParse to substitute
 			//call method to findIrrational??
 			//input = findNthRoot(input);
-			//input = AnsParse(input);
+			input = ansParse(input);
 
 			vector<char> conv = shuntYard(input);
 			conv = conversion(input);
 			vector<Input*> converted = conversion2(conv);
 			calc.setVec(converted);
-			//calc.solve();
+			calc.solve();
 
 			//two, pass vector of input to solve
 
