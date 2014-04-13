@@ -5,6 +5,10 @@ Calculator::Calculator(){
 	vector<Input*> RPNVec;
 }
 
+void Calculator::setVec(vector<Input*> Vec){
+	RPNVec = Vec;
+}
+
 
 // string Calculator::addAllToIndex(Input input1, Input input2, Operator operate, vector<Input> &RPNVec){
 // 	ostringstream str;
@@ -35,24 +39,25 @@ Calculator::Calculator(){
 // 	return str.str();
 // }
 
-void Calculator::add(int index, vector<Input*> Vec){
+void Calculator::add(int index){
 	int result;
-	if((typeid(*Vec[index]) == typeid(Integer)) && (typeid(*Vec[index + 1]) == typeid(Integer))){
-		Integer* first = (Integer*)Vec[index];
+	if((typeid(*RPNVec[index]) == typeid(Integer)) && (typeid(*RPNVec[index + 1]) == typeid(Integer))){
+		Integer* first = (Integer*)RPNVec[index];
 		int number1 = first->getInteger();
-		Integer* second = (Integer*)Vec[index + 1];
+		Integer* second = (Integer*)RPNVec[index + 1];
 		int number2 = second->getInteger();
 		result = number1 + number2;
 		Integer* res = new Integer(result);
 		vector<Input*> result;
 		for(int i =0; i<index; i++){
-			result[i] = Vec[i];
+			result[i] = RPNVec[i];
 		}
 		result.push_back(res);
-		for(int i =index+1; i<Vec.size()-2; i++){
-			result[i] = Vec[i];
+		for(int i =index+1; i<RPNVec.size()-2; i++){
+			result[i] = RPNVec[i];
 		}
-		Vec = result;
+
+		setVec(result);
 	}
 	// else{ 
 	// 	 // Input* input1 = RPNVec[index];
@@ -69,6 +74,26 @@ void Calculator::add(int index, vector<Input*> Vec){
 	// 	cout << test->getInteger();
 	// }
 
+}
+void Calculator::subtract(int index){
+	int result;
+	if((typeid(*RPNVec[index]) == typeid(Integer)) && (typeid(*RPNVec[index + 1]) == typeid(Integer))){
+		Integer* first = (Integer*)RPNVec[index];
+		int number1 = first->getInteger();
+		Integer* second = (Integer*)RPNVec[index + 1];
+		int number2 = second->getInteger();
+		result = number1 - number2;
+		Integer* res = new Integer(result);
+		vector<Input*> result;
+		for(int i =0; i<index; i++){
+			result[i] = RPNVec[i];
+		}
+		result.push_back(res);
+		for(int i =index+1; i<RPNVec.size()-2; i++){
+			result[i] = RPNVec[i];
+		}
+		RPNVec = result;
+	}
 }
 
 /* bool Calculator:: solve(){ //need some kind of index as a parameter?

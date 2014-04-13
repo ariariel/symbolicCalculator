@@ -1,6 +1,7 @@
 #ifndef CALCULATOR_H_
 #define CALCULATOR_H_
 #include "Input.h"
+#include "Integer.h"
 #include "Operator.h"
 #include <vector>
 #include <iostream>
@@ -10,14 +11,16 @@ using namespace std;
 
 class Calculator{
 
-protected:
-	vector<Input> RPNVec;
+private:
+	vector<Input*> RPNVec;
 
 public:
 	Calculator();
+	void setVec(vector<Input*> Vec);
 	bool solve();
-	string addAllToIndex(Input input1, Input input2, Operator operate, vector<Input> &RPNVec);
+	//string addAllToIndex(Input input1, Input input2, Operator operate);
 	void add(int index);
+	void subtract(int index);
 
 };
 #endif /* CALCULATOR_H_ */
