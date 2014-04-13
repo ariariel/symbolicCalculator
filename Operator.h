@@ -11,16 +11,15 @@ private:
 	char operand;
 
 public:
-	Operator():Input(){
+	Operator(){
 
 	}
 
 	Operator(char operand){ //need a default or initialization constructor?
 		this->operand = operand;
-		cout<< "OPERATOR OBJECT CREATED" << endl;
 	}
 
-	virtual char getOperand(){
+	char getOperand(){
 		return operand;
 	} 
 };

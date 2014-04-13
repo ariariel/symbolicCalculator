@@ -3,7 +3,15 @@ using namespace std;
 
 Calculator::Calculator(){
 	vector<Input*> RPNVec;
+	lastAns = 0;
 }
+string lastAns(){
+	return lastAns;
+}
+void setAns(string ans){
+	this->lastAns = ans;
+}
+
 
 void Calculator::setVec(vector<Input*> Vec){
 	RPNVec = Vec;

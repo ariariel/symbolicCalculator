@@ -14,10 +14,9 @@ public:
 	}
 	Integer(int value){
 		this->value = value;
-		cout<< "INTEGER OBJECT CREATED" << endl;
 	}
 
-	virtual int getInteger(){
+	int getInteger(){
 		return value;
 	}
 
