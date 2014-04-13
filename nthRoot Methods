@@ -2,6 +2,13 @@
 #include <vector>
 
 using namespace std;
+void nthRootToExponent(int x, int y) {
+	string x1 = to_string(x);
+	string y1 = to_string(y);
+	stringstream ss;
+	ss << y << "^" << "1/" << x;
+	cout << ss.str() << endl;
+}
 void findNthRoot(string y) {
     size_t position = y.find("rt:");
 	if (position != string::npos)
