@@ -2,28 +2,27 @@
 #include <string>
 using namespace std;
 
-void findNthRoot(string x)
+void findNthRoot(string y)
 {
-    size_t position = x.find("rt:");
+    size_t position = y.find("rt:");
     if (position != string::npos)
     {       
         size_t length = 1;
         size_t n = position - 1;
-        while (n > 0 && std::isdigit(x[n - 1])) {
+        while (n > 0 && std::isdigit(y[n - 1])) {
             --n;
             ++length;
         }
-        string str1 = x.substr(n, length);
+        string str1 = y.substr(n, length);
 
         length = 1;
-        size_t z = position + 3;
-        while (z < x.size() - 1 && std::isdigit(x[z + length]))
+        size_t x = position + 3;
+        while (x < y.size() - 1 && std::isdigit(y[x + length]))
             ++length;
-        string str2 = x.substr(z, length);
+        string str2 = y.substr(x, length);
+        int a = stoi(str1);
+        int b = stoi(str2);
+        //nthRootSolver(a, b);
+        
     }
-}
-
-int main()
-{
-    findNthRoot("2 - 1 + 99913221112222rt:4999 - 89");
 }
