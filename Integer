@@ -1,0 +1,7 @@
+Input::integer(int value): number(value){
+	this -> number = value;
+}
+
+int Input::getInteger(){
+	return value;
+}
