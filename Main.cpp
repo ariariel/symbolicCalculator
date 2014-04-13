@@ -93,7 +93,26 @@ vector<char> shuntYard(string x) {
     }
 	return queue;
 }
-
+string ansParse(string y) {
+    size_t check = y.find("Ans");
+    size_t check2 = y.find("ans");
+    size_t position;
+    if(check != string::npos) {
+        position = check;
+    }
+    else if(check2 != string::npos) {
+        position = check2;
+    }
+    stringstream ss;
+    for(int i = 0; i < position; i++) {
+        ss << y.at(i);
+    }
+    ss << calc.getlastAns();
+    for(int i = position + 3; i< y.size(); i++) {
+        ss << y.at(i);
+    }
+    return ss.str();
+}
 /*
 void findNthRoot(string y) {
     size_t position = y.find("rt:");
