@@ -1,0 +1,39 @@
+#include <iostream>
+#include <string>
+#include <sstream>
+using namespace std;
+
+void nthRootToExponent(int x, int y) {
+    string x1 = to_string(x);
+    string y1 = to_string(y);
+    stringstream ss;
+    ss << x << "^" << "1/" << y;
+    cout << ss.str();
+}
+void findNthRoot(string y) {
+    size_t position = y.find("rt:");
+    if (position != string::npos)
+    {       
+        size_t length = 1;
+        size_t n = position - 1;
+        while (n > 0 && std::isdigit(y[n - 1])) {
+            --n;
+            ++length;
+        }
+        string str1 = y.substr(n, length);
+        
+        length = 1;
+        size_t x = position + 3;
+        while (x < y.size() - 1 && std::isdigit(y[x + length]))
+            ++length;
+        string str2 = y.substr(x, length);
+        int a = stoi(str1);
+        int b = stoi(str2);
+        nthRootToExponent(a, b);
+                
+    }
+}
+int main()
+{
+    findNthRoot("2 - 1 + 2rt:9 - 89");
+}
