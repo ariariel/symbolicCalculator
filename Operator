@@ -1,0 +1,8 @@
+Input::operator(char operand): opera(operand){
+		this -> opera = operand;
+}
+
+string Input::getOperand(){
+	 return operand;
+
+}
