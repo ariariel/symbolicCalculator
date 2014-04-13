@@ -8,6 +8,17 @@ Calculator::Calculator(){
 void Calculator::setVec(vector<Input*> Vec){
 	RPNVec = Vec;
 }
+vector<Input*> Calculator::rewriteVec(int index, Input* res){
+	vector<Input*> result;
+	for(int i =0; i<index; i++){
+		result[i] = RPNVec[i];
+	}
+	result.push_back(res);
+	for(int i =index+1; i<RPNVec.size()-2; i++){
+		result[i] = RPNVec[i];
+	}
+	return result;
+}
 
 
 // string Calculator::addAllToIndex(Input input1, Input input2, Operator operate, vector<Input> &RPNVec){
@@ -84,15 +95,25 @@ void Calculator::subtract(int index){
 		int number2 = second->getInteger();
 		result = number1 - number2;
 		Integer* res = new Integer(result);
-		vector<Input*> result;
-		for(int i =0; i<index; i++){
-			result[i] = RPNVec[i];
+		RPNVec = rewriteVec(index,res);
+	}
+}
+void Calculator::divide(int index){
+	int result;
+	if((typeid(*RPNVec[index]) == typeid(Integer)) && (typeid(*RPNVec[index + 1]) == typeid(Integer))){
+		Integer* first = (Integer*)RPNVec[index];
+		int number1 = first->getInteger();
+		Integer* second = (Integer*)RPNVec[index + 1];
+		int number2 = second->getInteger();
+		result = number1 / number2;
+		if(typeid(result)==typeid(1)){
+			Integer* res = new Integer(result);
+			RPNVec = rewriteVec(index,res);
 		}
-		result.push_back(res);
-		for(int i =index+1; i<RPNVec.size()-2; i++){
-			result[i] = RPNVec[i];
+		else if(typeid(result)==typeid(0.5)){
+			Rational* res = new Rational(number1, number2);
+
 		}
-		RPNVec = result;
 	}
 }
 

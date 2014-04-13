@@ -96,11 +96,11 @@ vector<char> shuntYard(string x) {
 
 
 int main(){
-string a = "4-6";
+string a = "4/2";
 vector<char> output = shuntYard(a);
 vector<Input*> input = conversion2(output);
 //TESTING - cast the subclass upon the superclass to be able to access subclass methods
 Calculator* calc = new Calculator();
 calc->setVec(input);
-calc->subtract(0);
+calc->divide(0);
 }
