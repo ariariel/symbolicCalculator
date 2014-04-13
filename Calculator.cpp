@@ -1,4 +1,5 @@
 #include "Calculator.h"
+using namespace std;
 
 Calculator::Calculator(){
 	vector<Input*> RPNVec;
@@ -37,12 +38,21 @@ Calculator::Calculator(){
 void Calculator::add(int index, vector<Input*> Vec){
 	int result;
 	if((typeid(*Vec[index]) == typeid(Integer)) && (typeid(*Vec[index + 1]) == typeid(Integer))){
-		cout<< "hello";
-		Integer* first = (Integer*)RPNVec[index];
+		Integer* first = (Integer*)Vec[index];
 		int number1 = first->getInteger();
-		Integer* second = (Integer*)RPNVec[index + 1];
+		Integer* second = (Integer*)Vec[index + 1];
 		int number2 = second->getInteger();
-		int result = number1 + number2;
+		result = number1 + number2;
+		Integer* res = new Integer(result);
+		vector<Input*> result;
+		for(int i =0; i<index; i++){
+			result[i] = Vec[i];
+		}
+		result.push_back(res);
+		for(int i =index+1; i<Vec.size()-2; i++){
+			result[i] = Vec[i];
+		}
+		Vec = result;
 	}
 	// else{ 
 	// 	 // Input* input1 = RPNVec[index];
