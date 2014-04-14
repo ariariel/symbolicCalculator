@@ -6,7 +6,6 @@
 #include <vector>
 #include <cstdlib>
 #include <stdexcept>
-
 #include "Operator.h"
 #include "Input.h"
 #include "Integer.h"
@@ -17,18 +16,20 @@ vector<char> conversion(string x) {
 	vector<char> data(x.begin(), x.end());
 	return data;
 }
-vector<Input*> conversion2(vector<char> rpn){
+vector<Input*> conversion2(vector<string> rpn){
 	vector<Input*> input;
 	for(int i=0; i<rpn.size(); i++){
-		if(isdigit(rpn[i])){
-			input.push_back(new Integer(rpn[i]-'0'));
+		if(rpn[i]=="+"||rpn[i]=="-"||rpn[i]=="/"||rpn[i]=="*"||rpn[i]=="^"){
+			input.push_back(new Operator(rpn[i].at(0)));
 		}
-		else if(rpn[i]=='+'||rpn[i]=='-'||rpn[i]=='/'||rpn[i]=='*'||rpn[i]=='^'){
-			input.push_back(new Operator(rpn[i]));
+		else{   //push the integer
+			string a = rpn[i];
+			input.push_back(new Integer(atoi(a.c_str())));
 		}
 	}
 	return input;
 }
+
 vector<string> toStringVec(string expr){
 	vector<string> stringVec;
 	int count=0;
@@ -179,7 +180,7 @@ void findNthRoot(string y) {
 		    string str2 = y.substr(x, length);
 		    int a = stoi(str1);
 		    int b = stoi(str2);
-            cout << "a: " << a << "\n" << "b: " << b;
+            //cout << "a: " << a << "\n" << "b: " << b;
 		    nthRootToExponent(a, b);
         }
 	}
@@ -229,16 +230,10 @@ void menu(){
 			//cout << input;
 
 
-			//vector<char> conv = shuntYard(input);
-			//conv = conversion(input);
-			//vector<Input*> converted = conversion2(conv);
-			//calc.setVec(converted);
-			//calc.solve();
-
-			//two, pass vector of input to solve
-
-
-
+			vector<string> conv = shuntYard(input);
+			vector<Input*> converted = conversion2(conv);
+			calc.setVec(converted);
+			calc.solve();
 
 			cout << endl;
 			//call the necessary methods in order to put into RPN method, conversion, and solve. Or will ShuntYardAlg call these
@@ -301,11 +296,13 @@ void menu(){
 }
 
 int main(){
-string a = "456755-655456/578565+87568";
-vector<string> vec = toStringVec(a);
-for (int i = 0; i < vec.size(); ++i)
-{
-	cout<< vec[i];
+	//findNthRoot("5+2rt:9");
+	menu();
+//string a = "456755-655456/578565+87568";
+//vector<string> vec = toStringVec(a);
+//for (int i = 0; i < vec.size(); ++i)
+//{
+//	cout<< vec[i];
 }
 
 // vector<string> output = shuntYard(a);
@@ -321,4 +318,4 @@ for (int i = 0; i < vec.size(); ++i)
 // vector<Input*> result = calc->getVec();
 // Integer* test = (Integer*)result[0];
 // cout<< test->getInteger();
-}
+//}
