@@ -104,7 +104,13 @@ void Calculator::divide(int index){
 		int number1 = first->getInteger();
 		Integer* second = (Integer*)RPNVec[index + 1];
 		int number2 = second->getInteger();
-		result = number1 / number2;
+		if (number2 == 0){
+			cout << "Cannot divide by zero" << endl;
+			result = -1;
+		}
+		else if (number2 != 0){
+			result = number1 / number2;
+		}
 		if(typeid(result)==typeid(1)){
 			Integer* res = new Integer(result);
 			RPNVec = rewriteVec(index,res);
@@ -136,13 +142,26 @@ void Calculator::power(int index){
 		int number1 = first->getInteger();
 		Integer* second = (Integer*)RPNVec[index + 1];
 		int number2 = second->getInteger();
-		result = number1 ^ number2;
+		result = ipow(number1, number2);
 		Integer* res = new Integer(result);
 		RPNVec = rewriteVec(index,res);
 	}
 }
 
-void Calculator:: solve(){ 
+int Calculator::ipow(int base, int exp){
+    int result = 1;
+    while (exp)
+    {
+        if (exp & 1)
+            result *= base;
+        exp >>= 1;
+        base *= base;
+    }
+
+    return result;
+}
+
+bool Calculator:: solve(){ 
 
 	for(int i = 0; i<RPNVec.size(); i++){
 		if(typeid(*RPNVec[i]) == typeid(Operator)){
@@ -150,19 +169,24 @@ void Calculator:: solve(){
 			char op = opObject->getOperand();
 			switch(op){
 				case '+': add(i-2);
-						solve();
+						return solve();
 				case '-': subtract(i-2);
-						solve();
+						return solve();
 				case '/': divide(i-2);
-						solve();
+						return solve();
 				case '*': multiply(i-2);
-						solve();
+						return solve();
 				case '^': power(i-2);
-						solve();
+						return solve();
 			}
 		}
-		if(RPNVec.size() == 1){
+	}
+	if(RPNVec.size() == 1){
+
+			Integer* b = (Integer*)RPNVec[0];
+			int num = b->getInteger();
+			cout << num << endl;
 			cout<< "SOLVED!" << endl;
-		}
+			return true;
 	}
 }
