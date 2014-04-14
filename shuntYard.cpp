@@ -29,11 +29,28 @@ vector<Input*> conversion2(vector<char> rpn){
 	}
 	return input;
 }
+vector<string> toStringVec(string expr){
+	vector<string> stringVec;
+	int count=0;
+	for(int i =0; i<expr.size();i++){
+		if((expr.at(i)=='+')||(expr.at(i)=='-')||(expr.at(i)=='/')||(expr.at(i)=='*')||(expr.at(i)=='^')){
+			stringstream ss;
+			stringVec.push_back(expr.substr(count,i-count));
+			ss<<expr.at(i);
+			stringVec.push_back(ss.str());
+			ss.str("");
+			count = i+1;
+		}
+	}
+	if(expr.at(count)){
+		stringVec.push_back(expr.substr(count+1, expr.at(expr.size()-1)));
+	}
+	return stringVec;
+}
 
-
-vector<char> shuntYard(string x) {
-	vector<char> expr = conversion(x);
-	vector<char> queue;  stack<char> opStack;
+vector<string> shuntYard(string x) {
+	vector<string> expr = toStringVec(x);
+	vector<string> queue;  stack<char> opStack;
 	map<char, int> opPrec;
 	opPrec['('] = -1;
 	opPrec['+'] = 1; opPrec['-'] = 1;
@@ -41,22 +58,16 @@ vector<char> shuntYard(string x) {
 	opPrec['^']  = 3; opPrec['sqrt']  = 3;
 	bool lastWasOp = true;
 	for(int i=0;i<expr.size();i++){
-		if(isspace(expr[i])){
-			i++;
-		}
-		if (isdigit(expr[i])) {
-			// If the char is a number, add it to the output queue.
-			queue.push_back(expr[i]);
-			lastWasOp = false;
-		}
-		else{
-			switch (expr[i]) {
+		if((expr[i]=="+")||(expr[i]=="-")||(expr[i]=="/")||(expr[i]=="*")||(expr[i]=="^")){
+			switch (expr[i].at(0)) {
 		    case '(':
 		      opStack.push('(');
 		      break;
 		    case ')':
 		      while (opStack.top()!=('(')) {
-		        queue.push_back(opStack.top());
+		      	stringstream ss;
+		      	ss<<opStack.top();
+		        queue.push_back(ss.str());
 		        opStack.pop();
 		      }
 		      opStack.pop();
@@ -65,8 +76,8 @@ vector<char> shuntYard(string x) {
 		      	{
 		        if (lastWasOp) {
 		          // Convert unary operators to binary in the RPN.
-		          if (expr[i]=='-' || expr[i]=='+') {
-		            queue.push_back('0');
+		          if (expr[i]=="-" || expr[i]=="+") {
+		            queue.push_back("0");
 		          } else {
 		            throw domain_error(
 		                "Unrecognized unary operator.");
@@ -74,20 +85,29 @@ vector<char> shuntYard(string x) {
 		        }
 
 		        while (!opStack.empty() &&
-		            (opPrec[expr[i]] <= opPrec[opStack.top()])) //comparing stack operators
+		            (opPrec[expr[i].at(0)] <= opPrec[opStack.top()])) //comparing stack operators
 		        {
-		          queue.push_back(opStack.top());
+		          stringstream ss;
+		          ss<<opStack.top(); 		
+		          queue.push_back(ss.str());
 		          opStack.pop();
 		        }
 
-		        opStack.push(expr[i]);
+		        opStack.push(expr[i].at(0));
 		        lastWasOp = true;
 		      }
 		  }
 		}
+		else {
+			// If the string is a number, add it to the output queue.
+			queue.push_back(expr[i]);
+			lastWasOp = false;
+		}
 	} 
 	while(!opStack.empty()){   //empty the final stack
-    	queue.push_back(opStack.top());
+		stringstream ss;
+		ss<<opStack.top();
+    	queue.push_back(ss.str());
     	opStack.pop();
 
     }
@@ -96,11 +116,24 @@ vector<char> shuntYard(string x) {
 
 
 int main(){
-string a = "4/2";
-vector<char> output = shuntYard(a);
-vector<Input*> input = conversion2(output);
+string a = "44+44-3/333*99";
+vector<string> vec = toStringVec(a);
+for (int i = 0; i < vec.size(); ++i)
+{
+	cout<< vec[i];
+}
+
+// vector<string> output = shuntYard(a);
+// for (int i = 0; i < output.size(); ++i)
+// {
+// 	cout<< output[i];
+// }
+//vector<Input*> input = conversion2(output);
 //TESTING - cast the subclass upon the superclass to be able to access subclass methods
-Calculator* calc = new Calculator();
-calc->setVec(input);
-calc->divide(0);
+// Calculator* calc = new Calculator();
+// calc->setVec(input);
+// calc->solve();
+// vector<Input*> result = calc->getVec();
+// Integer* test = (Integer*)result[0];
+// cout<< test->getInteger();
 }
