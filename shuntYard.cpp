@@ -17,14 +17,15 @@ vector<char> conversion(string x) {
 	vector<char> data(x.begin(), x.end());
 	return data;
 }
-vector<Input*> conversion2(vector<char> rpn){
+vector<Input*> conversion2(vector<string> rpn){
 	vector<Input*> input;
 	for(int i=0; i<rpn.size(); i++){
-		if(isdigit(rpn[i])){
-			input.push_back(new Integer(rpn[i]-'0'));
+		if(rpn[i]=="+"||rpn[i]=="-"||rpn[i]=="/"||rpn[i]=="*"||rpn[i]=="^"){
+			input.push_back(new Operator(rpn[i].at(0)));
 		}
-		else if(rpn[i]=='+'||rpn[i]=='-'||rpn[i]=='/'||rpn[i]=='*'||rpn[i]=='^'){
-			input.push_back(new Operator(rpn[i]));
+		else{   //push the integer
+			string a = rpn[i];
+			input.push_back(new Integer(atoi(a.c_str())));
 		}
 	}
 	return input;
@@ -117,18 +118,11 @@ vector<string> shuntYard(string x) {
 
 int main(){
 string a = "44+44-3/333*99";
-vector<string> vec = toStringVec(a);
-for (int i = 0; i < vec.size(); ++i)
-{
-	cout<< vec[i];
-}
 
-// vector<string> output = shuntYard(a);
-// for (int i = 0; i < output.size(); ++i)
-// {
-// 	cout<< output[i];
-// }
-//vector<Input*> input = conversion2(output);
+
+vector<string> output = shuntYard(a);
+vector<Input*> input = conversion2(output);
+
 //TESTING - cast the subclass upon the superclass to be able to access subclass methods
 // Calculator* calc = new Calculator();
 // calc->setVec(input);
