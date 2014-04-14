@@ -19,11 +19,11 @@ void Calculator::setVec(vector<Input*> Vec){
 vector<Input*> Calculator::rewriteVec(int index, Input* res){
 	vector<Input*> result;
 	for(int i =0; i<index; i++){
-		result[i] = RPNVec[i];
+		result.push_back(RPNVec[i+2]);
 	}
 	result.push_back(res);
 	for(int i =index+1; i<RPNVec.size()-2; i++){
-		result[i] = RPNVec[i];
+		result.push_back(RPNVec[i+2]);
 	}
 	return result;
 }
