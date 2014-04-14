@@ -2,6 +2,15 @@
 #include <string>
 using namespace std;
 
+
+class dividebyzero: public exception
+{
+  virtual const char* what() const throw()
+  {
+    return "Cannot divide by zero";
+  }
+} nullzero;
+
 Calculator::Calculator(){
 	vector<Input*> RPNVec;
 	lastAns;
@@ -148,8 +157,8 @@ void Calculator::divide(int index){
 		Integer* second = (Integer*)RPNVec[index + 1];
 		int number2 = second->getInteger();
 		if (number2 == 0){
-			cout << "Cannot divide by zero" << endl;
 			result = -1;
+			throw nullzero;
 		}
 		else if (number2 != 0){
 			result = number1 / number2;
