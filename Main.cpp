@@ -29,11 +29,28 @@ vector<Input*> conversion2(vector<char> rpn){
 	}
 	return input;
 }
+vector<string> toStringVec(string expr){
+	vector<string> stringVec;
+	int count=0;
+	for(int i =0; i<expr.size();i++){
+		if((expr.at(i)=='+')||(expr.at(i)=='-')||(expr.at(i)=='/')||(expr.at(i)=='*')||(expr.at(i)=='^')){
+			stringstream ss;
+			stringVec.push_back(expr.substr(count, (i-count)));
+			ss<<expr.at(i);
+			stringVec.push_back(ss.str());
+			ss.str("");
+			count = i+1;
+		}
+	}
+	if(expr.at(count)){
+		stringVec.push_back(expr.substr(count, expr.at(expr.size()-1)));
+	}
+	return stringVec;
+}
 
-
-vector<char> shuntYard(string x) {
-	vector<char> expr = conversion(x);
-	vector<char> queue;  stack<char> opStack;
+vector<string> shuntYard(string x) {
+	vector<string> expr = toStringVec(x);
+	vector<string> queue;  stack<char> opStack;
 	map<char, int> opPrec;
 	opPrec['('] = -1;
 	opPrec['+'] = 1; opPrec['-'] = 1;
@@ -41,22 +58,16 @@ vector<char> shuntYard(string x) {
 	opPrec['^']  = 3; opPrec['sqrt']  = 3;
 	bool lastWasOp = true;
 	for(int i=0;i<expr.size();i++){
-		if(isspace(expr[i])){
-			i++;
-		}
-		if (isdigit(expr[i])) {
-			// If the char is a number, add it to the output queue.
-			queue.push_back(expr[i]);
-			lastWasOp = false;
-		}
-		else{
-			switch (expr[i]) {
+		if((expr[i]=="+")||(expr[i]=="-")||(expr[i]=="/")||(expr[i]=="*")||(expr[i]=="^")){
+			switch (expr[i].at(0)) {
 		    case '(':
 		      opStack.push('(');
 		      break;
 		    case ')':
 		      while (opStack.top()!=('(')) {
-		        queue.push_back(opStack.top());
+		      	stringstream ss;
+		      	ss<<opStack.top();
+		        queue.push_back(ss.str());
 		        opStack.pop();
 		      }
 		      opStack.pop();
@@ -65,8 +76,8 @@ vector<char> shuntYard(string x) {
 		      	{
 		        if (lastWasOp) {
 		          // Convert unary operators to binary in the RPN.
-		          if (expr[i]=='-' || expr[i]=='+') {
-		            queue.push_back('0');
+		          if (expr[i]=="-" || expr[i]=="+") {
+		            queue.push_back("0");
 		          } else {
 		            throw domain_error(
 		                "Unrecognized unary operator.");
@@ -74,25 +85,35 @@ vector<char> shuntYard(string x) {
 		        }
 
 		        while (!opStack.empty() &&
-		            (opPrec[expr[i]] <= opPrec[opStack.top()])) //comparing stack operators
+		            (opPrec[expr[i].at(0)] <= opPrec[opStack.top()])) //comparing stack operators
 		        {
-		          queue.push_back(opStack.top());
+		          stringstream ss;
+		          ss<<opStack.top(); 		
+		          queue.push_back(ss.str());
 		          opStack.pop();
 		        }
 
-		        opStack.push(expr[i]);
+		        opStack.push(expr[i].at(0));
 		        lastWasOp = true;
 		      }
 		  }
 		}
+		else {
+			// If the string is a number, add it to the output queue.
+			queue.push_back(expr[i]);
+			lastWasOp = false;
+		}
 	} 
 	while(!opStack.empty()){   //empty the final stack
-    	queue.push_back(opStack.top());
+		stringstream ss;
+		ss<<opStack.top();
+    	queue.push_back(ss.str());
     	opStack.pop();
 
     }
 	return queue;
 }
+
 string ansParse(string y) {
 	Calculator calc = Calculator();
     size_t check = y.find("Ans");
@@ -104,7 +125,7 @@ string ansParse(string y) {
     else if(check2 != string::npos) {
         position = check2;
     }
-	if(position != string::npos){
+	while(position != string::npos){
     stringstream ss;
     for(int i = 0; i < position; i++) {
         ss << y.at(i);
@@ -116,7 +137,21 @@ string ansParse(string y) {
     return ss.str();
 	}
 }
-/*
+
+string nthRootToExponent(int x, int y) {
+	stringstream str1;
+	stringstream str2;
+	str1 << x;
+	str2 << y;
+	string x1 = str1.str();
+	string y1 = str2.str();
+	//string x1 = to_string(x);
+	//string y1 = to_string(y);
+	stringstream ss;
+	ss << y1 << "^" << "1/" << x1;
+	return ss.str();
+}
+
 void findNthRoot(string y) {
     size_t position = y.find("rt:");
 	if (position != string::npos)
@@ -148,19 +183,13 @@ void findNthRoot(string y) {
 		    nthRootToExponent(a, b);
         }
 	}
-} */
-/*
-void nthRootToExponent(int x, int y) {
-	string x1 = to_string(x);
-	string y1 = to_string(y);
-	stringstream ss;
-	ss << y << "^" << "1/" << x;
-	cout << ss.str() << endl;
-}
-*/
+} 
+
 
 /*Menu accessed by user- in order to compute a new expression, the user needs to select the first option and then type the expression
-as they would normally. In order to obtain the previous answer solved, option 2 needs to be called. */
+as they would normally. In order to obtain the previous answer solved, option 2 needs to be called. */ 
+
+
 void menu(){
 
 	//create calculator object to access previous answer
@@ -196,13 +225,15 @@ void menu(){
 			//if the input contains ans, then call AnsParse to substitute
 			//call method to findIrrational??
 			//input = findNthRoot(input);
-			input = ansParse(input);
+			//input = ansParse(input);
+			//cout << input;
 
-			vector<char> conv = shuntYard(input);
-			conv = conversion(input);
-			vector<Input*> converted = conversion2(conv);
-			calc.setVec(converted);
-			calc.solve();
+
+			//vector<char> conv = shuntYard(input);
+			//conv = conversion(input);
+			//vector<Input*> converted = conversion2(conv);
+			//calc.setVec(converted);
+			//calc.solve();
 
 			//two, pass vector of input to solve
 
@@ -269,18 +300,25 @@ void menu(){
 	}
 }
 
-
 int main(){
-	menu();
+string a = "456755-655456/578565+87568";
+vector<string> vec = toStringVec(a);
+for (int i = 0; i < vec.size(); ++i)
+{
+	cout<< vec[i];
+}
 
-/*string a = "4-6";
-vector<char> output = shuntYard(a);
-vector<Input*> input = conversion2(output);
+// vector<string> output = shuntYard(a);
+// for (int i = 0; i < output.size(); ++i)
+// {
+// 	cout<< output[i];
+// }
+//vector<Input*> input = conversion2(output);
 //TESTING - cast the subclass upon the superclass to be able to access subclass methods
-Calculator* calc = new Calculator();
-calc->setVec(input);
-calc->subtract(0); */
-
-//for (int i = 0; i < input.size(); i++)
-//(Integer*)input[i].getInteger();
+// Calculator* calc = new Calculator();
+// calc->setVec(input);
+// calc->solve();
+// vector<Input*> result = calc->getVec();
+// Integer* test = (Integer*)result[0];
+// cout<< test->getInteger();
 }
