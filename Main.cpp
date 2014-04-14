@@ -9,6 +9,7 @@
 #include "Operator.h"
 #include "Input.h"
 #include "Integer.h"
+#include "Calculator.h"
 using namespace std;
 
 
@@ -140,16 +141,9 @@ string ansParse(string y) {
 }
 
 string nthRootToExponent(int x, int y) {
-	stringstream str1;
-	stringstream str2;
-	str1 << x;
-	str2 << y;
-	string x1 = str1.str();
-	string y1 = str2.str();
-	//string x1 = to_string(x);
-	//string y1 = to_string(y);
 	stringstream ss;
-	ss << y1 << "^" << "1/" << x1;
+	ss << y << "^" << "(1/" << x << ")";
+	//cout << ss.str();
 	return ss.str();
 }
 
@@ -180,7 +174,6 @@ void findNthRoot(string y) {
 		    string str2 = y.substr(x, length);
 		    int a = stoi(str1);
 		    int b = stoi(str2);
-            //cout << "a: " << a << "\n" << "b: " << b;
 		    nthRootToExponent(a, b);
         }
 	}
@@ -270,7 +263,7 @@ void menu(){
 				cout << "The program also supports exponentials. However, this doesn't include x^pi or x^e. " << endl;
 				cout << "For multiplication using irrationals, please add a multiplication sign between the symbols." << endl;
 				cout << "When subtracting a negative element, please use parenthesis to separate the postive and negative number." << endl;
-				cout << "You may have a space between a pair of operators, numbers, or operator-number pair." << endl;
+				cout << "You may NOT have a space between a pair of operators, numbers, or operator-number pair." << endl;
 			}
 
 			else if(helpinput == "back" || helpinput == "Back" || helpinput == "Quit" || helpinput == "quit"){
