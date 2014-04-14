@@ -43,7 +43,7 @@ vector<string> toStringVec(string expr){
 		}
 	}
 	if(expr.at(count)){
-		stringVec.push_back(expr.substr(count+1, expr.at(expr.size()-1)));
+		stringVec.push_back(expr.substr(count, expr.at(expr.size()-1)));
 	}
 	return stringVec;
 }
