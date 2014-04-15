@@ -29,7 +29,9 @@ public:
 	vector<Input*> rewriteVec(int index, Input* res);
 	string getlastAns();
 	void setAns(string ans);
+	void printSolution();
 	bool solve();
+	void ansParse(string &y);
 	//string addAllToIndex(Input input1, Input input2, Operator operate);
 	void add(int index);
 	void subtract(int index);
