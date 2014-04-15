@@ -11,6 +11,8 @@ class dividebyzero: public exception
   }
 } nullzero;
 
+
+
 Calculator::Calculator(){
 	vector<Input*> RPNVec;
 	lastAns;
@@ -21,7 +23,6 @@ string Calculator::getlastAns(){
 void Calculator::setAns(string ans){
 	this->lastAns = ans;
 }
-
 
 void Calculator::setVec(vector<Input*> Vec){
 	RPNVec = Vec;
@@ -228,6 +229,17 @@ int Calculator::ipow(int base, int exp){
 
     return result;
 }
+void Calculator::printSolution(){
+	if(typeid(*RPNVec[0]) == typeid(Integer)){
+		Integer* num = (Integer*)RPNVec[0];
+		cout << num->getInteger() << endl;
+	}
+	else if(typeid(*RPNVec[0]) == typeid(Rational)){
+		Rational* rat = (Rational*)RPNVec[0];
+		cout << rat->getNoom() << "/" << rat->getDen() << endl;
+	}
+}
+
 void Calculator::printSolution(){
 	if(typeid(*RPNVec[0]) == typeid(Integer)){
 		Integer* num = (Integer*)RPNVec[0];

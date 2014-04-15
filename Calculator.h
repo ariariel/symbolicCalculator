@@ -32,6 +32,7 @@ public:
 	void multiply(int index);
 	void power(int index);
 	int ipow(int base, int exp);
+	void printSolution();
 
 };
 #endif /* CALCULATOR_H_ */
