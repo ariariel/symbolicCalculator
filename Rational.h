@@ -4,6 +4,7 @@
 #define RATIONAL_H_
 #include <iostream>
 #include <stdexcept>
+#include "Input.h"
 
 using namespace std;
 
@@ -22,15 +23,11 @@ public:
   Rational( int num, int den )
   {
      this->Numerator=num;
-
-    if (Denominator == 0)
-    {
-      throw overflow_error("cannot have 0 as a demoninator");
-    }
-    else
-    {
-      this->Denominator = den;
-    }
+     this->Denominator = den;
+    // if(this->Denominator == 0)
+    // {
+    //   throw overflow_error("cannot have 0 as a demoninator");
+    // }
   }
   int getNoom(){
     return Numerator;
@@ -75,8 +72,48 @@ public:
           }
   }
 
-  Rational add(Rational rat){
+  Rational* add(Rational* rat){
+      int noom0 = this->Numerator;
+      int den0 = this->Denominator;
+      int den1 =rat->getDen();
+      int noom1 = rat->getNoom();
 
+      int newNoom = (noom0 * den1) + (den0 * noom1);
+      int newDen = den0*den1;
+      return new Rational(newNoom, newDen);
+  }
+  Rational* subtract(Rational* rat){
+      int noom0 = this->Numerator;
+      int den0 = this->Denominator;
+      int den1 =rat->getDen();
+      int noom1 = rat->getNoom();
+
+      int newNoom = (noom0 * den1) - (den0 * noom1);
+      int newDen = den0*den1;
+      return new Rational(newNoom, newDen);
+  }
+    //Multiply method for rational
+  Rational* multiply(Rational* rat){
+      int Numerator1 = this->Numerator;
+      int Denominator1 = this->Denominator;
+      int Numerator2 = rat->getNoom();
+      int Denominator2 = rat->getDen();
+      int finalNumerator = Numerator1 * Numerator2;
+      int finalDenominator = Denominator1 * Denominator2;
+      Rational* finalRat = new Rational(finalNumerator, finalDenominator);
+      return finalRat;
+  }
+
+  //Divide method for rational
+  Rational* divide(Rational* rat){
+    int Numerator1 = this->Numerator;
+    int Denominator1 = this->Denominator;
+    int Numerator2 = rat->getNoom();
+    int Denominator2 = rat->getDen();
+    int finalNumerator = Numerator1 * Denominator2;
+    int finalDenominator = Denominator1 * Numerator2;
+    Rational* finalRat = new Rational(finalNumerator, finalDenominator);
+    return finalRat;
   }
 
 };
