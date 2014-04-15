@@ -8,7 +8,9 @@
 
 using namespace std;
 
-
+/*
+Rational is the subclass of Input. It is used to represent fractions.
+*/
 
 class Rational: public Input
 {
@@ -23,81 +25,44 @@ public:
   Rational(int num, int den)
   {
      this->Numerator=num;
-     this->Denominator = den;
-    // if(this->Denominator == 0)
-    // {
-    //   throw overflow_error("cannot have 0 as a demoninator");
-    // }
+
+    if (Denominator == 0)
+    {
+      throw overflow_error("cannot have 0 as a demoninator");
+    }
+    else
+    {
+      this->Denominator = den;
+    }
   }
+
+  /*
+  GetNumerator method that returns the rational's respective numerator.
+  */
   int getNoom(){
     return Numerator;
   }
+
+  /*
+  setNoom method that initializes the numerator to a user defined value.
+  */
   void setNoom(int num){
     this->Numerator = num;
   }
+
+  /*
+  getDen method that returns the rational's respective denominator.
+  */
   int getDen(){
     return Denominator;
   }
+
+  /*
+  setDen method that initializes the denominator to a user defined value.
+  */
   void setDen(int den){
     this->Denominator = den;
   }
-
-  //Multiply method for rational
-  Rational multiply(Rational* rat){
-	    int Numerator1 = this->Numerator;
-		int Denominator1 = this->Denominator;
-		int Numerator2 = rat->getNoom();
-		int Denominator2 = rat->getDen();
-		int finalNumerator = Numerator1 * Numerator2;
-		int finalDenominator = Denominator1 * Denominator2;
-		Rational finalRat = Rational(finalNumerator, finalDenominator);
-		finalRat.Simplify();
-		return finalRat;
-  }
-
-  //Divide method for rational
-  Rational divide(Rational* rat){
-		int Numerator1 = this->Numerator;
-		int Denominator1 = this->Denominator;
-		int Numerator2 = rat->getNoom();
-		int Denominator2 = rat->getDen();
-		int finalNumerator = Numerator1 * Denominator2;
-		int finalDenominator = Denominator1 * Numerator2;
-		Rational finalRat = Rational(finalNumerator, finalDenominator);
-		finalRat.Simplify();
-		return finalRat;
-  }
-
-  int GCD()
-  {
-          int A = Numerator;
-          int B = Denominator;
-
-          int Temp;
-
-          while(B)
-          {
-                  Temp = B;
-                  B = A%B;
-                  A = Temp;
-          }
-
-          return A;
-  }
-  //Simplify the rational number to its smallest form
-  void Simplify(){ 
-	  int GCDNumber = GCD();
-          if(GCDNumber != 0)
-          {
-                  Numerator = Numerator / GCDNumber;
-                  Denominator = Denominator / GCDNumber;
-          }
-          else{
-            cout<< "" << endl;
-          }
-  }
-<<<<<<< HEAD
-=======
 
   Rational* add(Rational* rat){
       int noom0 = this->Numerator;
@@ -143,7 +108,40 @@ public:
     return finalRat;
   }
 
->>>>>>> fff77c20a1127513d0fde76ec69c9b20dadee113
+  /*
+  Helper method for simplify()
+  */
+  int GCD()
+  {
+          int A = Numerator;
+          int B = Denominator;
+
+          int Temp;
+
+          while(B)
+          {
+                  Temp = B;
+                  B = A%B;
+                  A = Temp;
+          }
+
+          return A;
+  }
+
+  /*
+  Simplify the rational number to its smallest form
+  */
+  void Simplify(){ 
+	  int GCDNumber = GCD();
+          if(GCDNumber != 0)
+          {
+                  Numerator = Numerator / GCDNumber;
+                  Denominator = Denominator / GCDNumber;
+          }
+          else{
+            cout<< "" << endl;
+          }
+  }
 };
 #endif 
 

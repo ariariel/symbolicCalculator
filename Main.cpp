@@ -1,3 +1,8 @@
+/*
+Calculator project by Ariel Farias, Quaide Tranter, Arturo Esquivel, Matt Cabral, and Marie Urmano
+COP 3503
+Section 129B
+*/
 #include <iostream> 
 #include <string>
 #include <sstream>
@@ -10,13 +15,17 @@
 #include "Input.h"
 #include "Integer.h"
 #include "Calculator.h"
+#include "Rational.h"
 using namespace std;
 
-
+/*Conversion takes in an input from the user and returns the data as a vector of characters. */
 vector<char> conversion(string x) {
 	vector<char> data(x.begin(), x.end());
 	return data;
 }
+
+/*Conversion2 takes in a vector of string sorted from the Reverse Polish notation method and converts it into
+a vector of Input pointers, assigning each respective value to its subclass. */
 vector<Input*> conversion2(vector<string> rpn){
 	vector<Input*> input;
 	for(int i=0; i<rpn.size(); i++){
@@ -31,6 +40,8 @@ vector<Input*> conversion2(vector<string> rpn){
 	return input;
 }
 
+/* toStringVec takes in a string expression and turns it into a vector of strings, accounting for double digits.
+*/
 vector<string> toStringVec(string expr){
 	vector<string> stringVec;
 	int count=0;
@@ -50,6 +61,10 @@ vector<string> toStringVec(string expr){
 	return stringVec;
 }
 
+/* The shuntYard method takes in a user defined string and sorts it in order of operations. It returns the string as
+a vector that is sorted into Reverse Polish notation, making the expression able to be solved. This takes PEMDAS into 
+account.
+*/
 vector<string> shuntYard(string x) {
 	vector<string> expr = toStringVec(x);
 	vector<string> queue;  stack<char> opStack;
@@ -116,6 +131,9 @@ vector<string> shuntYard(string x) {
 	return queue;
 }
 
+/* ansParse recognizes user input including 'ans' and calls getLastAns. It is used for return the previous answer of the
+user.
+*/
 string ansParse(string y) {
 	Calculator calc = Calculator();
     size_t check = y.find("Ans");
@@ -140,6 +158,9 @@ string ansParse(string y) {
 	}
 }
 
+/* nthRootToExponent is a helper method to findNthRoot. It is called within the method to turn a nth root
+into a representation as a power.
+*/
 string nthRootToExponent(int x, int y) {
 	stringstream ss;
 	ss << y << "^" << "(1/" << x << ")";
@@ -181,12 +202,10 @@ void findNthRoot(string y) {
 
 
 /*Menu accessed by user- in order to compute a new expression, the user needs to select the first option and then type the expression
-as they would normally. In order to obtain the previous answer solved, option 2 needs to be called. */ 
-
-
+as they would normally. */ 
 void menu(){
 
-	//create calculator object to access previous answer
+	Calculator calc = Calculator();
 	char keepRunning = 'y';
 	string userInput;
 	string input;
@@ -204,7 +223,6 @@ void menu(){
 	cout << endl;
 
 		if(userInput == "1"){
-			Calculator calc = Calculator();
 		    string input;
 			char keepRun = 'y';
 			while(keepRun){
@@ -217,20 +235,14 @@ void menu(){
 				break;
 			}
 			//if the input contains ans, then call AnsParse to substitute
-			//call method to findIrrational??
 			//input = findNthRoot(input);
-			//input = ansParse(input);
-			//cout << input;
 
 
 			vector<string> conv = shuntYard(input);
 			vector<Input*> converted = conversion2(conv);
 			calc.setVec(converted);
 			calc.solve();
-
 			cout << endl;
-			//call the necessary methods in order to put into RPN method, conversion, and solve. Or will ShuntYardAlg call these
-			//methods for us?
 			}
 		}
 
@@ -289,13 +301,7 @@ void menu(){
 }
 
 int main(){
-	//findNthRoot("5+2rt:9");
 	menu();
-//string a = "456755-655456/578565+87568";
-//vector<string> vec = toStringVec(a);
-//for (int i = 0; i < vec.size(); ++i)
-//{
-//	cout<< vec[i];
 }
 
 // vector<string> output = shuntYard(a);

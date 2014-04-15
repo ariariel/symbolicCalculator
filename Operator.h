@@ -5,21 +5,27 @@
 #include <iostream>
 using namespace std;
 
+/*
+Class Operator is a subclass of Input. It is used to represent operations, which include /, *, +, -, and ^.
+*/
 class Operator: public Input{
 
 private:
 	char operand;
 
 public:
-	Operator(){
 
+	//Default constructor
+	Operator():Input(){
 	}
 
-	Operator(char operand){ //need a default or initialization constructor?
+	//Initialization constructor
+	Operator(char operand){
 		this->operand = operand;
 	}
 
-	char getOperand(){
+	//getOperand returns the necessary operand.
+	virtual char getOperand(){
 		return operand;
 	} 
 };

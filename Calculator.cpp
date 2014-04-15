@@ -1,8 +1,7 @@
 #include "Calculator.h"
-#include <string>
 using namespace std;
 
-
+//Handling the divide by zero exception
 class dividebyzero: public exception
 {
   virtual const char* what() const throw()
@@ -12,24 +11,38 @@ class dividebyzero: public exception
 } nullzero;
 
 
-
+//Default Constructor
 Calculator::Calculator(){
 	vector<Input*> RPNVec;
 	lastAns;
 }
+
+/*
+getlastAns() returns the user's lastAns.
+*/
 string Calculator::getlastAns(){
 	return lastAns;
 }
+
+/*
+setAns sets the lastAns for the user.
+*/
 void Calculator::setAns(string ans){
 	this->lastAns = ans;
 }
 
+/*
+Sets the vector as a global vector
+*/
 void Calculator::setVec(vector<Input*> Vec){
 	RPNVec = Vec;
 }
+
+/*
+rewriteVec is responsible for shrinking the vector down to one value, returning a definite answer. It is called in the 
+operator methods.
+*/
 vector<Input*> Calculator::rewriteVec(int index, Input* res){
-	//Rational* res1 = (Rational*)res;
-	//cout<< typeid(*res).name()<<endl;
 	vector<Input*> result;
 	for(int i =0; i<index; i++){
 		result.push_back(RPNVec[i]);
@@ -40,28 +53,7 @@ vector<Input*> Calculator::rewriteVec(int index, Input* res){
 	}
 	return result;
 }
-void Calculator::ansParse(string& y) {
-    size_t check = y.find("Ans");
-    size_t check2 = y.find("ans");
-    size_t position = 0;
-    if(check != string::npos) {
-        position = check;
-    }
-    else if(check2 != string::npos) {
-        position = check2;
-    }
-	while(position != string::npos){
-    stringstream ss;
-    for(int i = 0; i < position; i++) {
-        ss << y.at(i);
-    }
-    ss << getlastAns();
-    for(int i = position + 3; i< y.size(); i++) {
-        ss << y.at(i);
-    }
-    y = ss.str();
-	}
-}
+
 
 // string Calculator::addAllToIndex(Input input1, Input input2, Operator operate, vector<Input> &RPNVec){
 // 	ostringstream str;
@@ -88,13 +80,15 @@ void Calculator::ansParse(string& y) {
 // 	else if(typeid(input2) == typeid(Irrational)){
 // 	str << input2.getIrrational();
 // 	}
-
 // 	return str.str();
 // }
 
+/*
+Add method that takes in the index of the vector and adds that value with the value next to it in the index.
+It then calls the rewriteVec method, which shrinks the vector down two elements.
+*/
 void Calculator::add(int index){
 	int result;
-	
 	if((typeid(*RPNVec[index]) == typeid(Integer)) && (typeid(*RPNVec[index + 1]) == typeid(Integer))){
 		Integer* first = (Integer*)RPNVec[index];
 		int number1 = first->getInteger();
@@ -102,17 +96,6 @@ void Calculator::add(int index){
 		int number2 = second->getInteger();
 		result = number1 + number2;
 		Integer* res = new Integer(result);
-		RPNVec = rewriteVec(index, res);
-	}
-	// string one = typeid(*RPNVec[index]).name();
-	// string two = typeid(*RPNVec[index + 1]).name();
-	else if((typeid(*RPNVec[index]) == typeid(Rational)) && (typeid(*RPNVec[index + 1]) == typeid(Rational))){
-		// cout<< typeid(*RPNVec[index]).name()<<endl;
-		// cout<< typeid(*RPNVec[index+1]).name()<<endl;
-		Rational* first = (Rational*)RPNVec[index]; ///BUG RIGHT HERE
-		Rational* second = (Rational*)RPNVec[index + 1];
-		Rational* res = first->add(second);
-		res->Simplify();
 		RPNVec = rewriteVec(index, res);
 	}
 	// else{ 
@@ -131,6 +114,11 @@ void Calculator::add(int index){
 	// }
 
 }
+
+/*
+Subtract method that takes in the index of the vector and subtracts that value with the value next to it in the index.
+It then calls the rewriteVec method, which shrinks the vector down two elements.
+*/
 void Calculator::subtract(int index){
 	int result;
 	if((typeid(*RPNVec[index]) == typeid(Integer)) && (typeid(*RPNVec[index + 1]) == typeid(Integer))){
@@ -142,14 +130,13 @@ void Calculator::subtract(int index){
 		Integer* res = new Integer(result);
 		RPNVec = rewriteVec(index,res);
 	}
-	else if((typeid(*RPNVec[index]) == typeid(Rational)) && (typeid(*RPNVec[index + 1]) == typeid(Rational))){
-		Rational* ratfirst = (Rational*)RPNVec[index]; ///BUG RIGHT HERE
-		Rational* ratsecond = (Rational*)RPNVec[index + 1];
-		Rational* res = ratfirst->subtract(ratsecond);
-		res->Simplify();
-		RPNVec = rewriteVec(index, res);
-	}
 }
+
+/*
+Divide method that takes in the index of the vector and divides that value with the value next to it in the index.
+It then calls the rewriteVec method, which shrinks the vector down two elements. It also takes into account rational
+numbers.
+*/
 void Calculator::divide(int index){
 	int result;
 	if((typeid(*RPNVec[index]) == typeid(Integer)) && (typeid(*RPNVec[index + 1]) == typeid(Integer))){
@@ -164,27 +151,23 @@ void Calculator::divide(int index){
 		else if (number2 != 0){
 			result = number1 / number2;
 		}
-		if(number1%number2==0){
+		if(typeid(result)==typeid(1)){
 			Integer* res = new Integer(result);
 			RPNVec = rewriteVec(index,res);
 		}
-		else{
-			Rational* rat = new Rational(number1, number2);
-			rat->Simplify();
-			//res->Simplify();
-			RPNVec = rewriteVec(index, rat);
-			
+		else if(typeid(result)==typeid(0.5)){
+			Rational* res = new Rational(number1, number2);
+			res->Simplify();
+			RPNVec = rewriteVec(index, res);
 
 		}
 	}
-	else if((typeid(*RPNVec[index]) == typeid(Rational)) && (typeid(*RPNVec[index + 1]) == typeid(Rational))){
-		Rational* ratfirst = (Rational*)RPNVec[index]; ///BUG RIGHT HERE
-		Rational* ratsecond = (Rational*)RPNVec[index + 1];
-		Rational* res = ratfirst->divide(ratsecond);
-		res->Simplify();
-		RPNVec = rewriteVec(index, res);
-	}
 }
+
+/*
+Multiply method that takes in the index of the vector and multiplies that value with the value next to it in the index.
+It then calls the rewriteVec method, which shrinks the vector down two elements.
+*/
 void Calculator::multiply(int index){
 	int result;
 	if((typeid(*RPNVec[index]) == typeid(Integer)) && (typeid(*RPNVec[index + 1]) == typeid(Integer))){
@@ -196,14 +179,12 @@ void Calculator::multiply(int index){
 		Integer* res = new Integer(result);
 		RPNVec = rewriteVec(index,res);
 	}
-	else if((typeid(*RPNVec[index]) == typeid(Rational)) && (typeid(*RPNVec[index + 1]) == typeid(Rational))){
-		Rational* ratfirst = (Rational*)RPNVec[index]; ///BUG RIGHT HERE
-		Rational* ratsecond = (Rational*)RPNVec[index + 1];
-		Rational* res = ratfirst->multiply(ratsecond);
-		res->Simplify();
-		RPNVec = rewriteVec(index, res);
-	}
 }
+
+/*
+Power method that takes in the index of the vector and takes the power of that value next to it in the index.
+It then calls the rewriteVec method, which shrinks the vector down two elements.
+*/
 void Calculator::power(int index){
 	int result;
 	if((typeid(*RPNVec[index]) == typeid(Integer)) && (typeid(*RPNVec[index + 1]) == typeid(Integer))){
@@ -217,6 +198,7 @@ void Calculator::power(int index){
 	}
 }
 
+//Helper method for power method
 int Calculator::ipow(int base, int exp){
     int result = 1;
     while (exp)
@@ -229,6 +211,10 @@ int Calculator::ipow(int base, int exp){
 
     return result;
 }
+
+/*
+printSolution aids in the printing of rational and integer numbers to the screen as an answer.
+*/
 void Calculator::printSolution(){
 	if(typeid(*RPNVec[0]) == typeid(Integer)){
 		Integer* num = (Integer*)RPNVec[0];
@@ -240,18 +226,12 @@ void Calculator::printSolution(){
 	}
 }
 
-void Calculator::printSolution(){
-	if(typeid(*RPNVec[0]) == typeid(Integer)){
-		Integer* num = (Integer*)RPNVec[0];
-		cout << num->getInteger() << endl;
-	}
-	else if(typeid(*RPNVec[0]) == typeid(Rational)){
-		Rational* rat = (Rational*)RPNVec[0];
-		cout << rat->getNoom() << "/" << rat->getDen() << endl;
-	}
-}
-
+/*
+Recursive method solve that checks to see what operation is in the vector. If the operation matches, then it performs the
+respective operation, shrinking the vector down to size.
+*/
 bool Calculator:: solve(){ 
+
 	for(int i = 0; i<RPNVec.size(); i++){
 		if(typeid(*RPNVec[i]) == typeid(Operator)){
 			Operator* opObject = (Operator*)RPNVec[i];
@@ -271,19 +251,11 @@ bool Calculator:: solve(){
 		}
 	}
 	if(RPNVec.size() == 1){
-			if(typeid(*RPNVec[0])== typeid(Rational)){
-				Rational* rat = (Rational*)RPNVec[0];
-				ostringstream ss;
-				ss<<rat->getNoom() <<"/"<< rat->getDen();
-				setAns(ss.str());
-			}
-			else if(typeid(*RPNVec[0])== typeid(Integer)){
-				Integer* ans = (Integer*)RPNVec[0];
-				ostringstream ss;
-				ss<<ans->getInteger();
-				setAns(ss.str());
-			}
-			printSolution();
+
+			Integer* b = (Integer*)RPNVec[0];
+			int num = b->getInteger();
+			cout << num << endl;
+			cout<< "SOLVED!" << endl;
 			return true;
 	}
 }

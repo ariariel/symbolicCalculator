@@ -1,3 +1,8 @@
+/*
+Header file for Calculator.cpp. Contains necessary methods to support powers, division, multiplication, and other operations.
+It also contains the recursive solve() method that utilizes the operator methods to shrink down the vector, going until
+the vector is of size 1.
+*/
 #ifndef CALCULATOR_H_
 #define CALCULATOR_H_
 #include "Input.h"
@@ -15,7 +20,7 @@ using namespace std;
 class Calculator{
 
 private:
-	vector<Input*> RPNVec;
+	vector<Input*> RPNVec; //Global Vector RPNVec
 	string lastAns;
 
 public:

@@ -4,9 +4,11 @@
 
 using namespace std;
 
+/*
+Input is the superclass of Integer, Operator, Rational, and Irrational.
+*/
 class Input{
 public:
-	Input(){};
 	virtual ~Input(){};
 };
 
