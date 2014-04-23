@@ -9,6 +9,7 @@ the vector is of size 1.
 #include "Integer.h"
 #include "Operator.h"
 #include "Rational.h"
+#include "Irrational.h"
 #include <vector>
 #include <iostream>
 #include <sstream>
@@ -39,7 +40,6 @@ public:
 	void multiply(int index);
 	void power(int index);
 	int ipow(int base, int exp);
-	void printSolution();
 
 };
 #endif /* CALCULATOR_H_ */

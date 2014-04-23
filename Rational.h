@@ -65,8 +65,8 @@ public:
   }
 
   Rational* add(Rational* rat){
-      int noom0 = this->Numerator;
-      int den0 = this->Denominator;
+      int noom0 = this->getNoom();
+      int den0 = this->getDen();
       int den1 =rat->getDen();
       int noom1 = rat->getNoom();
 
@@ -75,8 +75,8 @@ public:
       return new Rational(newNoom, newDen);
   }
   Rational* subtract(Rational* rat){
-      int noom0 = this->Numerator;
-      int den0 = this->Denominator;
+      int noom0 = this->getNoom();
+      int den0 = this->getDen();
       int den1 =rat->getDen();
       int noom1 = rat->getNoom();
 
@@ -86,26 +86,50 @@ public:
   }
     //Multiply method for rational
   Rational* multiply(Rational* rat){
-      int Numerator1 = this->Numerator;
-      int Denominator1 = this->Denominator;
+      int Numerator1 = this->getNoom();
+      int Denominator1 = this->getDen();
       int Numerator2 = rat->getNoom();
       int Denominator2 = rat->getDen();
       int finalNumerator = Numerator1 * Numerator2;
       int finalDenominator = Denominator1 * Denominator2;
-      Rational* finalRat = new Rational(finalNumerator, finalDenominator);
-      return finalRat;
+      //Rational* finalRat = new Rational(finalNumerator, finalDenominator);
+      //return finalRat;
+      return new Rational(finalNumerator, finalDenominator);
   }
+
+  Rational* pow(int numb){
+	int Numer = this->getNoom();
+	int Denom = this->getDen();
+	int NewNoom = powHelper(Numer, numb);
+	int NewDen = powHelper(Denom, numb);
+		return new Rational(NewNoom, NewDen);
+  
+  }
+
+  int Rational::powHelper(int base, int exp){
+    int result = 1;
+    while (exp)
+    {
+        if (exp & 1)
+            result *= base;
+        exp >>= 1;
+        base *= base;
+    }
+
+    return result;
+}
 
   //Divide method for rational
   Rational* divide(Rational* rat){
-    int Numerator1 = this->Numerator;
-    int Denominator1 = this->Denominator;
+    int Numerator1 = this->getNoom();
+    int Denominator1 = this->getDen();
     int Numerator2 = rat->getNoom();
     int Denominator2 = rat->getDen();
     int finalNumerator = Numerator1 * Denominator2;
     int finalDenominator = Denominator1 * Numerator2;
-    Rational* finalRat = new Rational(finalNumerator, finalDenominator);
-    return finalRat;
+    //Rational* finalRat = new Rational(finalNumerator, finalDenominator);
+    //return finalRat;
+      return new Rational(finalNumerator, finalDenominator);
   }
 
   /*
@@ -144,7 +168,3 @@ public:
   }
 };
 #endif 
-
-
-
-

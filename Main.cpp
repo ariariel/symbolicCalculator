@@ -1,5 +1,5 @@
 /*
-Calculator project by Ariel Farias, Quaide Tranter, Arturo Esquivel, Matt Cabral, and Marie Urmano
+Calculator project by Ariel Farias, Marie Urmano, Quaide Tranter, Arturo Esquivel, and Matt Cabral
 COP 3503
 Section 129B
 */
@@ -29,34 +29,216 @@ a vector of Input pointers, assigning each respective value to its subclass. */
 vector<Input*> conversion2(vector<string> rpn){
 	vector<Input*> input;
 	for(int i=0; i<rpn.size(); i++){
-		if(rpn[i]=="+"||rpn[i]=="-"||rpn[i]=="/"||rpn[i]=="*"||rpn[i]=="^"){
+		if(rpn[i]=="+"||rpn[i]=="-"||rpn[i]=="/"||rpn[i]=="*"||rpn[i]=="^"||rpn[i]=="("||rpn[i]==")"){
 			input.push_back(new Operator(rpn[i].at(0)));
+					Operator* o = (Operator*)(input[i]);
+					cout << o->getOperand() << "this is the type of operand in input vector" <<endl;
 		}
-		else{   //push the integer
+		else{   //push the integer, or the irrational, depending on what it is
 			string a = rpn[i];
-			input.push_back(new Integer(atoi(a.c_str())));
+			if(a == ("e")|| a ==("pi")){
+				input.push_back(new Irrational(a));
+				Irrational* irr = (Irrational*)(input[i]);
+				cout << irr->getIrrational() << "this is the type of irrational in input vector" << endl;
+				//now for all operations, create an add, subtract, multiply, divide, power methods for irrational in irrational class.
+				//will need to append the string, etc for all
+				
+			}
+			else{input.push_back(new Integer(atoi(a.c_str())));
+							Integer* in = (Integer*)(input[i]);
+							cout << in->getInteger() << "this is the type of integer in input vector" << endl;
+			}
 		}
+			//cout << typeid(input[i]).name() << " This is the type of the data in RPN vec" << endl;
 	}
-	return input;
+		return input;
+}
+
+string findSqRoot(string y) {
+    stringstream ss; 
+ while(y.find("sqrt:") != string::npos){
+    size_t position = y.find("sqrt:");
+    size_t last = y.find_last_of("sqrt:");
+        size_t length = 1;
+        size_t n = position - 1;
+        length = 1;
+    	size_t x = position + 5;
+        
+		string str1 = y.substr(0, position);
+        ss << str1;
+        
+        if(y.at(x) == '(') {
+            int otherPar1 = y.find(')');
+            int otherPar2 = y.find('(');
+            int otherPar = otherPar1 - otherPar2 - 1;
+            string str3 = y.substr(x+1, otherPar); 
+        }
+        else {
+		    while ((x < y.size()) && isdigit(y[(x) - (length)])){
+					++length;
+			}   
+				string str2 = y.substr(x, length+1000000000000);
+                int b = stoi(str2);
+                
+                
+                if(((int)position - 1) >= 0){
+                    if(y.at(((int)position - 1)) == '-'){
+                    string str = ss.str();
+                    ss.str("");
+                    str.pop_back();
+                        if(!str.empty()){
+                        ss << str << "+";
+        			    }
+					    else{
+					    ss << str;
+					    } 
+                         ss << b << "^" << "(-1/2)";
+                    }
+                    else{
+                    ss << b << "^" << "(1/2)";
+                    }   
+                }
+                else{
+                    ss << b << "^" << "(1/2)";
+                }
+                
+                stringstream bb;
+                bb << b;
+                string NumValue = bb.str();
+                size_t expressionValue = y.find(NumValue, position);
+                
+                string str4 = y.substr(expressionValue+NumValue.length(), y.length());
+                ss << str4;
+            
+			y = ss.str();
+			ss.str("");
+	} 
+ }
+         cout << y << " this is y's value"<< endl;
+    	return y;
+}
+/* 
+findNth root searches for nrt: operators within the string and returns them, reparsed into the string, as exponents for our shunting yard algorithm.
+*/
+string nthRootToExponent(int x, int y) {
+	stringstream ss;
+	ss << y << "^" << "(1/" << x << ")";
+	return ss.str();
+}
+
+//NTH ROOT NEEDS TO WORK WITH NUMBERS BIGGER THAN NINE CHARACTERS. Right now it only functions with up to nine.
+string findNthRoot(string y) {
+    stringstream ss;
+    while(y.find("rt:") != string::npos){
+    size_t position = y.find("rt:");
+    if ((position != string::npos)){
+		size_t length = 1;
+		size_t n = position - 1;
+		while (n > 0 && isdigit(y[n - 1])) {
+			--n;
+			++length;
+		}
+		string str1 = y.substr(0, position-1);
+        string str5 = y.substr(n, length);
+		int a = stoi(str5);
+        ss << str1;
+        
+		length = 1;
+		size_t x = position + 3;
+        if(y.at(x) == '(') {
+            int otherPar1 = y.find(')');
+            int otherPar2 = y.find('(');
+            int otherPar = otherPar1 - otherPar2 - 1;
+            string str3 = y.substr(x+1, otherPar);
+        }
+        else {
+		    while ((x < y.size()) && isdigit(y[(x) - (length)])){
+					++length;
+			}   //only works to nine characters (the base number)
+				string str2 = y.substr(x, length+1000000000000);
+                
+				int b = stoi(str2);
+                
+                stringstream cc;
+                cc << a;
+                string aValue = cc.str();
+                
+                if((int)(position - aValue.length() - 1) >= 0){
+                    if(y.at(((int)position - aValue.length() - 1)) == '-'){
+                    string str = ss.str();
+                    ss.str("");
+                    str.pop_back();
+                        if(!str.empty()){
+                        ss << str << "+";
+    				    }
+					    else{
+					    ss << str;
+					    } 
+                         ss << b << "^" << "(-1/" << a << ")";
+                    }
+                
+                
+                    else{
+                    ss << b << "^" << "(1/" << a << ")";
+                    }   
+                }
+                else{
+                    ss << b << "^" << "(1/" << a << ")";
+                }
+        
+                stringstream bb;
+                bb << b;
+                string NumValue = bb.str();
+                size_t expressionValue = y.find(NumValue, position);
+              
+            
+            string str4 = y.substr(expressionValue+NumValue.length(), y.length());
+            ss << str4;
+            
+            y = ss.str();
+            ss.str("");
+	}
+    }
+} 
+cout << y << endl;
+return y;
 }
 
 /* toStringVec takes in a string expression and turns it into a vector of strings, accounting for double digits.
 */
 vector<string> toStringVec(string expr){
+	cout << expr<< endl;
+	size_t position = expr.find("rt:");
+	size_t position1 = expr.find("sqrt:");
+	if(position1 != string::npos){
+		expr = findSqRoot(expr);
+		cout << expr << " this is after findSqRoot" << endl;
+	}
+	if(position != string::npos){
+		expr = findNthRoot(expr);
+		cout << expr << " this is after findNthRoot" << endl;
+	}
 	vector<string> stringVec;
 	int count=0;
-	for(int i =0; i<expr.size();i++){
-		if((expr.at(i)=='+')||(expr.at(i)=='-')||(expr.at(i)=='/')||(expr.at(i)=='*')||(expr.at(i)=='^')){
+	for(int i = 0; i < expr.size(); i++){
+		if((expr.at(i)=='(')||(expr.at(i)==')')||(expr.at(i)=='+')||(expr.at(i)=='-')||(expr.at(i)=='/')||(expr.at(i)=='*')||(expr.at(i)=='^')){
 			stringstream ss;
+			if((i-count) != 0){
+				//cout << "condition called" << endl;
 			stringVec.push_back(expr.substr(count, (i-count)));
-			ss<<expr.at(i);
+			}
+			ss << expr.at(i);
 			stringVec.push_back(ss.str());
 			ss.str("");
 			count = i+1;
 		}
 	}
-	if(expr.at(count)){
-		stringVec.push_back(expr.substr(count, expr.at(expr.size()-1)));
+	if(count < expr.size()){
+		//cout << "is called" << endl;
+		stringVec.push_back(expr.substr(count, (expr.size()-1)));
+	}
+	for(int i = 0; i < stringVec.size(); i++){
+		cout << stringVec[i]<<" this is the index of toString method"<< endl;
 	}
 	return stringVec;
 }
@@ -67,6 +249,10 @@ account.
 */
 vector<string> shuntYard(string x) {
 	vector<string> expr = toStringVec(x);
+	for(int i = 0; i < expr.size(); i++){
+		string s = expr[i];
+		cout << s << endl;
+	}
 	vector<string> queue;  stack<char> opStack;
 	map<char, int> opPrec;
 	opPrec['('] = -1;
@@ -75,19 +261,23 @@ vector<string> shuntYard(string x) {
 	opPrec['^']  = 3; opPrec['sqrt']  = 3;
 	bool lastWasOp = true;
 	for(int i=0;i<expr.size();i++){
-		if((expr[i]=="+")||(expr[i]=="-")||(expr[i]=="/")||(expr[i]=="*")||(expr[i]=="^")){
+		if((expr[i]=="+")||(expr[i]=="-")||(expr[i]=="/")||(expr[i]=="*")||(expr[i]=="^")||(expr[i]=="(")||(expr[i]==")")){
 			switch (expr[i].at(0)) {
 		    case '(':
 		      opStack.push('(');
 		      break;
 		    case ')':
-		      while (opStack.top()!=('(')) {
-		      	stringstream ss;
+		      while ((!opStack.empty() && (opStack.top() != '('))) {
+				stringstream ss;
 		      	ss<<opStack.top();
 		        queue.push_back(ss.str());
 		        opStack.pop();
-		      }
-		      opStack.pop();
+			  }
+			  if(opStack.empty()){
+					throw domain_error(
+							"Unrecognized unary operator.");
+					}
+			  	opStack.pop();
 		      break;
 		    default:  //op precedence
 		      	{
@@ -95,7 +285,8 @@ vector<string> shuntYard(string x) {
 		          // Convert unary operators to binary in the RPN.
 		          if (expr[i]=="-" || expr[i]=="+") {
 		            queue.push_back("0");
-		          } else {
+		          } 
+				  else {
 		            throw domain_error(
 		                "Unrecognized unary operator.");
 		          }
@@ -128,78 +319,12 @@ vector<string> shuntYard(string x) {
     	opStack.pop();
 
     }
+	for(int i = 0; i < queue.size(); i++){
+		cout << queue[i]; }
+		cout << endl;
+		cout << "This is the RPN notation above" << endl;
 	return queue;
 }
-
-/* ansParse recognizes user input including 'ans' and calls getLastAns. It is used for return the previous answer of the
-user.
-*/
-string ansParse(string y) {
-	Calculator calc = Calculator();
-    size_t check = y.find("Ans");
-    size_t check2 = y.find("ans");
-    size_t position = 0;
-    if(check != string::npos) {
-        position = check;
-    }
-    else if(check2 != string::npos) {
-        position = check2;
-    }
-	while(position != string::npos){
-    stringstream ss;
-    for(int i = 0; i < position; i++) {
-        ss << y.at(i);
-    }
-    ss << calc.getlastAns();
-    for(int i = position + 3; i< y.size(); i++) {
-        ss << y.at(i);
-    }
-    return ss.str();
-	}
-}
-
-/* nthRootToExponent is a helper method to findNthRoot. It is called within the method to turn a nth root
-into a representation as a power.
-*/
-string nthRootToExponent(int x, int y) {
-	stringstream ss;
-	ss << y << "^" << "(1/" << x << ")";
-	//cout << ss.str();
-	return ss.str();
-}
-
-void findNthRoot(string y) {
-    size_t position = y.find("rt:");
-	if (position != string::npos)
-	{
-		size_t length = 1;
-		size_t n = position - 1;
-		while (n > 0 && isdigit(y[n - 1])) {
-			--n;
-			++length;
-		}
-		string str1 = y.substr(n, length);
-        
-		length = 1;
-		size_t x = position + 3;
-        if(y.at(x) == '(') {
-            int otherPar1 = y.find(')');
-            int otherPar2 = y.find('(');
-            int otherPar = otherPar1 - otherPar2 - 1;
-            string str3 = y.substr(x+1, otherPar); 
-            cout << str3;
-        }
-        else {
-		    while (x < y.size() - 1 && isdigit(y[x + length]))
-			    ++length;
-		    string str2 = y.substr(x, length);
-		    int a = stoi(str1);
-		    int b = stoi(str2);
-		    nthRootToExponent(a, b);
-        }
-	}
-} 
-
 
 /*Menu accessed by user- in order to compute a new expression, the user needs to select the first option and then type the expression
 as they would normally. */ 
@@ -237,12 +362,18 @@ void menu(){
 			//if the input contains ans, then call AnsParse to substitute
 			//input = findNthRoot(input);
 
-
-			vector<string> conv = shuntYard(input);
-			vector<Input*> converted = conversion2(conv);
-			calc.setVec(converted);
-			calc.solve();
-			cout << endl;
+			try{ 
+				vector<string> conv = shuntYard(input); 
+				vector<Input*> converted = conversion2(conv);
+				calc.setVec(converted);
+				if(calc.solve() == false){
+				cout << "An error has occurred." << endl;
+				}
+				cout << endl;
+			}
+			catch(domain_error){
+				cout << "Unrecognized order of operators." << endl;
+			}
 			}
 		}
 
@@ -302,6 +433,8 @@ void menu(){
 
 int main(){
 	menu();
+
+return 0;
 }
 
 // vector<string> output = shuntYard(a);
